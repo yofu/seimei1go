@@ -121,3 +121,83 @@ func (h *Hole) Move() error {
 	h.memory = append(h.memory, next)
 	return nil
 }
+
+func (h *Hole) MoveUp() error {
+	p := h.Up()
+	if p.state == OUTOFRANGE {
+		return fmt.Errorf("up is OUTOFRANGE")
+	} else if p.state == BLANK {
+		return fmt.Errorf("up is BLANK")
+	}
+	for _, m := range h.memory {
+		if p.X == m.X && p.Y == m.Y {
+			return fmt.Errorf("already visited")
+		}
+	}
+	h.board.Set(h.position.X, h.position.Y, p.state)
+	p.state = BLANK
+	h.position.X = p.X
+	h.position.Y = p.Y
+	h.memory = append(h.memory, p)
+	return nil
+}
+
+func (h *Hole) MoveDown() error {
+	p := h.Down()
+	if p.state == OUTOFRANGE {
+		return fmt.Errorf("down is OUTOFRANGE")
+	} else if p.state == BLANK {
+		return fmt.Errorf("down is BLANK")
+	}
+	for _, m := range h.memory {
+		if p.X == m.X && p.Y == m.Y {
+			return fmt.Errorf("already visited")
+		}
+	}
+	h.board.Set(h.position.X, h.position.Y, p.state)
+	p.state = BLANK
+	h.position.X = p.X
+	h.position.Y = p.Y
+	h.memory = append(h.memory, p)
+	return nil
+}
+
+func (h *Hole) MoveRight() error {
+	p := h.Right()
+	if p.state == OUTOFRANGE {
+		return fmt.Errorf("right is OUTOFRANGE")
+	} else if p.state == BLANK {
+		return fmt.Errorf("right is BLANK")
+	}
+	for _, m := range h.memory {
+		if p.X == m.X && p.Y == m.Y {
+			return fmt.Errorf("already visited")
+		}
+	}
+	h.board.Set(h.position.X, h.position.Y, p.state)
+	p.state = BLANK
+	h.position.X = p.X
+	h.position.Y = p.Y
+	h.memory = append(h.memory, p)
+	return nil
+}
+
+func (h *Hole) MoveLeft() error {
+	p := h.Left()
+	if p.state == OUTOFRANGE {
+		return fmt.Errorf("left is OUTOFRANGE")
+	} else if p.state == BLANK {
+		return fmt.Errorf("left is BLANK")
+	}
+	for _, m := range h.memory {
+		if p.X == m.X && p.Y == m.Y {
+			return fmt.Errorf("already visited")
+		}
+	}
+	h.board.Set(h.position.X, h.position.Y, p.state)
+	p.state = BLANK
+	h.position.X = p.X
+	h.position.Y = p.Y
+	h.memory = append(h.memory, p)
+	return nil
+}
