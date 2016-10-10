@@ -112,8 +112,8 @@ func (l *random) Execute(_ context.Context, f *flag.FlagSet, _ ...interface{}) s
 	termbox.SetInputMode(termbox.InputEsc | termbox.InputMouse)
 	rand.Seed(time.Now().UnixNano())
 	b := seimei1go.NewBoard(l.N, l.N)
-	for i := 4; i < 12; i++ {
-		for j := 4; j < 12; j++ {
+	for i := 22; i < 42; i++ {
+		for j := 22; j < 42; j++ {
 			b.Set(i, j, seimei1go.INNER)
 		}
 	}
