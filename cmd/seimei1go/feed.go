@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/subcommands"
 	"github.com/yofu/seimei1go"
-	driver "github.com/yofu/seimei1go/driver/termbox"
+	driver "github.com/yofu/seimei1go/driver/shiny"
 	"golang.org/x/net/context"
 )
 
