@@ -1,6 +1,9 @@
 package seimei1go
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+)
 
 type Board struct {
 	X    int
@@ -125,4 +128,49 @@ func (b *Board) CreateHole(x, y int) (*Hole, error) {
 	} else {
 		return NewHole(b, hx, hy), nil
 	}
+}
+
+func (b *Board) Random(s State) (*Point, error) {
+	cand := make([]*Point, 0)
+	num := 0
+	for i := 0; i < b.X; i++ {
+		for j := 0; j < b.Y; j++ {
+			if b.data[i][j].state == s {
+				cand = append(cand, b.data[i][j])
+				num++
+			}
+		}
+	}
+	if num == 0 {
+		return nil, fmt.Errorf("no point")
+	}
+	return cand[rand.Int()%num], nil
+}
+
+func (b *Board) MoveFromRandomBound() (*Hole, error) {
+	bp, err := b.Random(BOUND)
+	if err != nil {
+		return nil, err
+	}
+	if s := b.State(bp.X-1, bp.Y); s == BLANK {
+		h := NewHole(b, bp.X-1, bp.Y)
+		h.MoveRight()
+		return h, nil
+	}
+	if s := b.State(bp.X+1, bp.Y); s == BLANK {
+		h := NewHole(b, bp.X+1, bp.Y)
+		h.MoveLeft()
+		return h, nil
+	}
+	if s := b.State(bp.X, bp.Y-1); s == BLANK {
+		h := NewHole(b, bp.X, bp.Y-1)
+		h.MoveUp()
+		return h, nil
+	}
+	if s := b.State(bp.X, bp.Y+1); s == BLANK {
+		h := NewHole(b, bp.X, bp.Y+1)
+		h.MoveDown()
+		return h, nil
+	}
+	return nil, fmt.Errorf("no candidate")
 }
