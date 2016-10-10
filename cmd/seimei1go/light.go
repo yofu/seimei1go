@@ -40,7 +40,7 @@ func (l *light) pollEvent(b *seimei1go.Board, ch chan seimei1go.Event) {
 	go func(b0 *seimei1go.Board) {
 		for {
 			select {
-			case <-time.After(100 * time.Millisecond):
+			case <-time.After(time.Millisecond):
 				if !l.moving && b.State(l.X, l.Y) == seimei1go.BLANK {
 					h, err := b.CreateHole(l.X, l.Y)
 					if err != nil {
@@ -49,16 +49,12 @@ func (l *light) pollEvent(b *seimei1go.Board, ch chan seimei1go.Event) {
 					l.moving = true
 					go func(board *seimei1go.Board, hole *seimei1go.Hole) {
 						for {
-							select {
-							case <-time.After(time.Millisecond):
-								err := hole.Move()
-								if err != nil {
-									board.SetBound()
-									driver.Draw(board)
-									l.moving = false
-									return
-								}
+							err := hole.Move()
+							if err != nil {
+								board.SetBound()
 								driver.Draw(board)
+								l.moving = false
+								return
 							}
 						}
 					}(b0, h)

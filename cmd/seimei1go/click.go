@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"time"
 
 	"github.com/google/subcommands"
 	"github.com/yofu/seimei1go"
@@ -53,16 +52,12 @@ func (c *click) pollEvent(b *seimei1go.Board, ch chan seimei1go.Event) {
 					c.moving = true
 					go func(board *seimei1go.Board, hole *seimei1go.Hole) {
 						for {
-							select {
-							case <-time.After(20 * time.Millisecond):
-								err := hole.Move()
-								if err != nil {
-									board.SetBound()
-									driver.Draw(board)
-									c.moving = false
-									return
-								}
+							err := hole.Move()
+							if err != nil {
+								board.SetBound()
 								driver.Draw(board)
+								c.moving = false
+								return
 							}
 						}
 					}(b, h)
