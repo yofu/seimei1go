@@ -41,7 +41,7 @@ func (l *light) pollEvent(b *seimei1go.Board, ch chan seimei1go.Event) {
 	go func(b0 *seimei1go.Board) {
 		for {
 			select {
-			case <-time.After(time.Millisecond):
+			case <-time.After(5*time.Millisecond):
 				if !l.moving {
 					h, err := b0.MoveFromRandomBound(func(x, y int) float64 {
 						return math.Exp(-math.Hypot(float64(x-l.X), float64(y-l.Y)))
@@ -74,6 +74,9 @@ func (l *light) pollEvent(b *seimei1go.Board, ch chan seimei1go.Event) {
 				case seimei1go.KeyEsc:
 					return
 				}
+			case seimei1go.EventMouse:
+				l.X = ev.X
+				l.Y = ev.Y
 			}
 		}
 	}
