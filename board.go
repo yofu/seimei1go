@@ -130,26 +130,27 @@ func (b *Board) CreateHole(x, y int) (*Hole, error) {
 	}
 }
 
-func (b *Board) Random(s State, cond func(x, y int) bool) (*Point, error) {
-	cand := make([]*Point, 0)
-	num := 0
+func (b *Board) Random(s State, cond func(x, y int) float64) (*Point, error) {
+	var cand *Point
+	max := 0.0
 	for i := 0; i < b.X; i++ {
 		for j := 0; j < b.Y; j++ {
 			if b.data[i][j].state == s {
-				if cond(i, j) {
-					cand = append(cand, b.data[i][j])
-					num++
+				val := cond(i, j) * rand.Float64()
+				if val > max {
+					cand = b.data[i][j]
+					max = val
 				}
 			}
 		}
 	}
-	if num == 0 {
+	if cand == nil {
 		return nil, fmt.Errorf("no point")
 	}
-	return cand[rand.Int()%num], nil
+	return cand, nil
 }
 
-func (b *Board) MoveFromRandomBound(cond func(x, y int) bool) (*Hole, error) {
+func (b *Board) MoveFromRandomBound(cond func(x, y int) float64) (*Hole, error) {
 	bp, err := b.Random(BOUND, cond)
 	if err != nil {
 		return nil, err

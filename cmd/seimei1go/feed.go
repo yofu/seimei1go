@@ -64,11 +64,11 @@ func (l *feed) pollEvent(b *seimei1go.Board) {
 			select {
 			case <-time.After(100 * time.Millisecond):
 				if !l.moving {
-					h, err := b0.MoveFromRandomBound(func(x, y int) bool {
+					h, err := b0.MoveFromRandomBound(func(x, y int) float64 {
 						if x+y > int(0.6*float64(b0.X+b0.Y)) || x+y < int(0.4*float64(b0.X+b0.Y)) {
-							return true
+							return 0.7
 						}
-						return false
+						return 0.3
 					})
 					if err != nil {
 						continue
