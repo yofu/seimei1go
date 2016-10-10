@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"math"
 	"time"
 
 	"github.com/google/subcommands"
@@ -41,8 +42,10 @@ func (l *light) pollEvent(b *seimei1go.Board, ch chan seimei1go.Event) {
 		for {
 			select {
 			case <-time.After(time.Millisecond):
-				if !l.moving && b.State(l.X, l.Y) == seimei1go.BLANK {
-					h, err := b.CreateHole(l.X, l.Y)
+				if !l.moving {
+					h, err := b0.MoveFromRandomBound(func(x, y int) float64 {
+						return math.Exp(-math.Hypot(float64(x-l.X), float64(y-l.Y)))
+					})
 					if err != nil {
 						continue
 					}
