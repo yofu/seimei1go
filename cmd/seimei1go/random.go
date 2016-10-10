@@ -64,7 +64,7 @@ func (l *random) pollEvent(b *seimei1go.Board) {
 			select {
 			case <-time.After(100 * time.Millisecond):
 				if !l.moving {
-					h, err := b0.MoveFromRandomBound()
+					h, err := b0.MoveFromRandomBound(func(x, y int) bool { return true })
 					if err != nil {
 						continue
 					}
