@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"math"
 	"math/rand"
 	"time"
 
@@ -14,6 +15,7 @@ import (
 type feed struct {
 	N      int
 	moving bool
+	feeds  [][]float64
 }
 
 func (*feed) Name() string {
@@ -41,10 +43,11 @@ func (l *feed) pollEvent(b *seimei1go.Board, ch chan seimei1go.Event) {
 			case <-time.After(time.Millisecond):
 				if !l.moving {
 					h, err := b0.MoveFromRandomBound(func(x, y int) float64 {
-						if x+y > int(0.6*float64(b0.X+b0.Y)) || x+y < int(0.4*float64(b0.X+b0.Y)) {
-							return 0.7
+						sum := 0.0
+						for _, c := range l.feeds {
+							sum += math.Exp(-math.Hypot(float64(x)-c[0]*float64(b.X), float64(y)-c[1]*float64(b.Y)))
 						}
-						return 0.3
+						return sum
 					})
 					if err != nil {
 						continue
@@ -80,6 +83,14 @@ func (l *feed) pollEvent(b *seimei1go.Board, ch chan seimei1go.Event) {
 }
 
 func (l *feed) Execute(_ context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
+	l.feeds = [][]float64{
+		[]float64{0.2, 0.2},
+		[]float64{0.3, 0.7},
+		[]float64{0.4, 0.4},
+		[]float64{0.6, 0.8},
+		[]float64{0.7, 0.3},
+		[]float64{0.8, 0.6},
+	}
 	b := seimei1go.NewBoard(l.N, l.N)
 	start := int(0.25 * float64(l.N))
 	end := int(0.75 * float64(l.N))
