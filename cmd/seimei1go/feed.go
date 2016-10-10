@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"math/rand"
 	"time"
 
 	"github.com/google/subcommands"
@@ -32,6 +33,7 @@ func (c *feed) SetFlags(f *flag.FlagSet) {
 }
 
 func (l *feed) pollEvent(b *seimei1go.Board, ch chan seimei1go.Event) {
+	rand.Seed(time.Now().UnixNano())
 	driver.Draw(b)
 	go func(b0 *seimei1go.Board) {
 		for {

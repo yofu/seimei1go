@@ -1,9 +1,6 @@
 package termboxdriver
 
 import (
-	"math/rand"
-	"time"
-
 	termbox "github.com/nsf/termbox-go"
 	"github.com/yofu/seimei1go"
 )
@@ -42,7 +39,6 @@ func Start(b *seimei1go.Board, poll func(*seimei1go.Board, chan seimei1go.Event)
 	}
 	defer termbox.Close()
 	termbox.SetInputMode(termbox.InputEsc | termbox.InputMouse)
-	rand.Seed(time.Now().UnixNano())
 	ch := make(chan seimei1go.Event)
 	go func() {
 		for {
