@@ -118,10 +118,12 @@ func Start(b *seimei1go.Board, poll func(*seimei1go.Board, chan seimei1go.Event)
 				}
 			case mouse.Event:
 				if e.Direction == mouse.DirRelease {
+					s := sz.Bounds()
+					t := tex.Bounds()
 					ch <- seimei1go.EventMouse{
 						Key: seimei1go.MouseRelease,
-						X:   int(e.X),
-						Y:   int(e.Y),
+						X:   int(e.X) * (t.Max.X - t.Min.X) / (s.Max.X - s.Min.X),
+						Y:   int(e.Y) * (t.Max.Y - t.Min.Y) / (s.Max.Y - s.Min.Y),
 					}
 				}
 			case paint.Event:
