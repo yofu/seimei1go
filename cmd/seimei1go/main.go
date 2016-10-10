@@ -15,6 +15,7 @@ func main() {
 	subcommands.Register(&click{}, "")
 	subcommands.Register(&light{}, "")
 	subcommands.Register(&random{}, "")
+	subcommands.Register(&feed{}, "")
 
 	flag.Parse()
 	ctx := context.Background()
