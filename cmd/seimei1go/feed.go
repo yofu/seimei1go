@@ -83,8 +83,10 @@ func (l *feed) pollEvent(b *seimei1go.Board, ch chan seimei1go.Event) {
 
 func (l *feed) Execute(_ context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
 	b := seimei1go.NewBoard(l.N, l.N)
-	for i := 22; i < 42; i++ {
-		for j := 22; j < 42; j++ {
+	start := int(0.25 * float64(l.N))
+	end := int(0.75 * float64(l.N))
+	for i := start; i < end; i++ {
+		for j := start; j < end; j++ {
 			b.Set(i, j, seimei1go.INNER)
 		}
 	}
